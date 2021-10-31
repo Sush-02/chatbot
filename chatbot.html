@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width,inital-scale=1.0">
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+	<title>chatbot</title>
+
+	<style type="text/css">
+
+		::-webkit-scrollbar{
+			width:0;
+
+		}
+
+
+		*{
+			margin:0;
+			padding:0;
+			box-sizing:border-box;
+		}
+
+		body{
+			width:100vw;
+			height:100vh;
+			display:grid;
+			justify-content:center;
+			overflow:hidden;
+		}
+
+		#main{
+			width:100vw;
+			max-width:540px;
+			height:100vh;
+		    box-shadow:inset 0 0 10px 4px #1116;
+        }
+
+        h2{
+        	text-align:center;
+        	font-family:sans-serif;
+        	background:#1c1c46;
+        	color:#fff;
+        	padding:8px;
+        	text-shadow:1px 1px 4px #111;
+        	margin-bottom:8px;
+        }
+        #msg_area{
+        	height:82%;
+        	padding:0 12px;
+        	overflow-y:scroll;
+        	scroll-behavior:smooth;
+
+        }
+
+       
+        #robot{
+        	display:flex;
+        	align-items:center;
+
+        }
+        h3{
+        	font-family:monospace;
+        	font-size:20px;
+
+        }
+
+        #input{
+        	height:7%;
+        	min-height:42px;
+        	display:grid;
+        	grid-template-columns:70% 30%;
+        	margin:8px 16px;
+        	border-radius:32px;
+        	background:linear-gradient(#ececee 50%, #1c1f46 50%);
+        	box-shadow:inset 0 1px 0 #777;
+
+        }
+
+        #text{
+        	outline:none;
+        	font-size:20px;
+        	background: #ececee;
+        	color:#333;
+        	border-radius:32px 0 32px 32px;
+        	padding:0 16px;
+        	border:solid 1px #777;
+        	border-right: none;
+
+        }
+        #send{
+        	outline:none;
+        	font-size:20px;
+        	color:#eee;
+        	background:#1c1f46;
+        	border:none;
+        	border-radius:32px;
+        	transition-duration:0.2s;
+        }
+
+
+        #send:active{
+        	font-size:16px;
+
+        }
+
+        .left, .right{
+        	font-size:18px;
+        	font-family:monospace;
+        	display:inline-block;
+        	width:auto;
+        	max-width:60%;
+        	padding:14px;
+        	word-wrap:break-word;
+        	margin:8px 14px;
+
+        }
+
+        .left{
+        	color:#0000;
+        	background:#b3bfca;
+        	border-radius:0 16px 16px 16px;
+        }
+
+        .right{
+        	color:#fff;
+        	background:#1c1f46;
+        	border-radius:16px 16px 0 16px;
+        	float:right;
+
+        }
+
+        .msgCon1, .msgCon2{
+        	width:100%;
+        	display:inline-block;
+        }
+
+</style>        
+</head>
+<body onload="start()">
+	<div id="main">
+
+		<h2>chatbot</h2>
+
+	<div id="msg_area">
+		<div id="robot">
+			<div id="bot"></div>
+			<h3> Lady help chatbot</h3>
+		</div>
+	</div>
+
+	<div id="input">
+		<input type="text" placeholder="New message" id="text">
+		<button id=send> Send <i class="fa fa-paper-plane"></i></button>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+
+<script type="text/javascript">
+	
+function start() {
+
+
+	let res_msg = document.createElement('div');
+	res_msg.innerHtml ="Hello myself friend How can I help You?";
+	res_msg.setAttribute("class","left");
+
+
+	document.getElementById('msg_area').appendchild(res_msg);
+
+
+}
+    
+    document.getElementById('send').addEventListner("click",async (e) =>
+    {
+    	e.preventdefault();
+    	var req = document.getElementById('text').value ;
+
+    	if(req == undefined || req == ""){
+
+    	}
+
+        else{
+
+        	let res ="";
+
+        	await axios.get('https://api.monkedev.com/fun/chat?msg= ${req}').then(data =>  {
+        		res =JSON.stringify(data.data.response)
+
+        	})
+
+        	let msg_req = document.createElement('div');
+        	let msg_res = document.createElement('div');
+
+        	let Con1 = document.createElement('div');
+        	let Con2 = document.createElement('div');
+
+        	Con1.setAttribute("class","msgCon1");
+        	Con2.setAttribute("class","msgCon2");
+
+
+        	msg_req.innerHTML = req;
+        	msg_res.innerHTML = res;
+
+
+        	msg_req.setAttribute("class","right");
+        	msg_res.setAttribute("class","left");
+
+
+        	let message = document.getElementById('msg_area');
+
+        	message.appendchild(Con1);
+        	message.appendchild(Con2);
+
+
+        	Con1.appendchild(msg_req);
+        	Con2.appendchild(msg_res);
+
+
+        	document.getElementById('text').value="";
+
+        }
+        
+    
+    }
+
+
+</script>
+</html>
